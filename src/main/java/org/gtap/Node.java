@@ -1,4 +1,3 @@
-
 package org.gtap;
 
 import java.awt.Color;
@@ -9,7 +8,7 @@ import java.awt.Graphics;
 public class Node {
 
     private int xPos, yPos; // Coordinates of center (ideally)
-    private int width = 20, height = 20;
+    private int radius = 10, diameter = radius * 2;
 
     public Node(int x, int y) {
         xPos = x;
@@ -32,16 +31,20 @@ public class Node {
         return yPos;
     }
 
+    public Point getCenter() {
+        return new Point(xPos, yPos);
+    }
+
     public int getWidth() {
-        return width;
+        return diameter;
     }
 
     public int getHeight() {
-        return height;
+        return diameter;
     }
 
     public boolean contains(int x, int y) {
-        return new Ellipse2D.Double(xPos, yPos, width, height).contains(new Point(x, y));
+        return new Ellipse2D.Double(xPos - radius, yPos - radius, diameter, diameter).contains(new Point(x, y));
     }
 
     public void moveTo(int x, int y) {
@@ -50,8 +53,10 @@ public class Node {
     }
 
     public void paint(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillOval(xPos, yPos, width, height);
+        g.setColor(Color.WHITE);
+        g.fillOval(xPos - radius, yPos - radius, diameter, diameter);
+        g.setColor(Color.DARK_GRAY);
+        g.drawOval(xPos - radius, yPos - radius, diameter, diameter);
     }
 
 }
