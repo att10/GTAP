@@ -2,6 +2,8 @@ package org.gtap;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -11,15 +13,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class GCanvas extends JPanel implements MouseListener, MouseMotionListener {
+public class GCanvas extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    ArrayList<Node> nodeList;
-    ArrayList<Edge> edgeList;
+    SimpleGraph graph;
+    GUndoManager undoManager;
     Node currentNode;
     Edge currentEdge;
 
@@ -27,23 +29,31 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
 
     public GCanvas() {
 
-        nodeList = new ArrayList<Node>();
-        edgeList = new ArrayList<Edge>();
+        graph = new SimpleGraph();
+        undoManager = new GUndoManager(graph);
         setBackground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.addKeyListener(this);
+        this.setFocusable(true);
     }
 
     private void moveNode(Node n, int x, int y) {
         n.setX(x);
         n.setY(y);
+
+        ArrayList<Edge> edges = n.getEdges();
+        for (Edge e : edges) {
+            e.nodeMoved(n);
+        }
+
         repaint();
     }
 
     private Node selectNode(int x, int y) {
         Node current = null;
-        for (Node n : nodeList) {
+        for (Node n : graph.getNodes()) {
             if (n.contains(x, y)) {
                 current = n;
             }
@@ -51,15 +61,20 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
         return current;
     }
 
+    public void removeNode(Node n) {
+        graph.removeNode(n);
+        repaint();
+    }
+
     @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        for (Node n : nodeList) {
+        for (Node n : graph.getNodes()) {
             n.paint(g);
         }
 
-        for (Edge e : edgeList) {
+        for (Edge e : graph.getEdges()) {
             e.paint(g);
         }
     }
@@ -67,10 +82,17 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
     @Override
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
-            nodeList.add(new Node(e.getX(), e.getY()));
+            currentNode = new Node(e.getX(), e.getY());
+            graph.addNode(currentNode);
+            undoManager.add(new GraphElement(currentNode, null));
+            currentNode = null;
             numNodes++;
             repaint();
         }
+
+        // FOR TESTING
+        // System.out.println(nodeList);
+        // System.out.println(edgeList);
     }
 
     @Override
@@ -78,20 +100,26 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
         currentNode = this.selectNode(e.getX(), e.getY());
         if (SwingUtilities.isRightMouseButton(e) && currentNode != null) {
             currentEdge = new Edge(currentNode, e.getX(), e.getY());
-            edgeList.add(currentEdge);
+            graph.addEdge(currentEdge);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+
         if (SwingUtilities.isRightMouseButton(e)) {
+
+            // get the second node the edge will be attached to
             Node endNode = selectNode(e.getX(), e.getY());
-            if (endNode != null) {
-                currentEdge.setNode2(endNode);
+
+            // check if it is valid, if not remove, if yes add
+            if (endNode == null || currentNode.hasNeighbor(endNode) || currentNode == endNode) {
+                graph.removeEdge(currentEdge);
             } else {
-                edgeList.remove(currentEdge);
-                currentEdge = null;
+                currentEdge.setNode2(endNode);
+                undoManager.add(new GraphElement(null, currentEdge));
             }
+
             repaint();
         }
     }
@@ -121,6 +149,27 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if ((e.getKeyCode() == KeyEvent.VK_Z) && (e.isControlDown())) {
+            undoManager.undo();
+            repaint();
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
 
     }

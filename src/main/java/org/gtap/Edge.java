@@ -22,12 +22,36 @@ public class Edge {
         y2 = y;
 
         node1 = n1;
+        node1.addEdge(this);
     }
 
     public void setNode2(Node n2) {
+
         node2 = n2;
+
+        node1.addNeighbor(node2);
+        node2.addEdge(this);
+
         x2 = n2.getX();
         y2 = n2.getY();
+    }
+
+    public Node getNode1() {
+        return node1;
+    }
+
+    public Node getNode2() {
+        return node2;
+    }
+
+    public void nodeMoved(Node n) {
+        if (n == node1) {
+            x1 = n.getX();
+            y1 = n.getY();
+        } else {
+            x2 = n.getX();
+            y2 = n.getY();
+        }
     }
 
     public void setX2(int x) {
@@ -44,4 +68,7 @@ public class Edge {
         g2.draw(lin);
     }
 
+    public String toString() {
+        return "Edge";
+    }
 }

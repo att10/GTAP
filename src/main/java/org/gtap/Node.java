@@ -3,14 +3,24 @@ package org.gtap;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 import java.awt.Graphics;
+
+/*
+ * Drawable Node Object.
+ */
 
 public class Node {
 
-    private int xPos, yPos; // Coordinates of center (ideally)
+    ArrayList<Node> neighbors;
+    ArrayList<Edge> edges;
+
+    private int xPos, yPos;
     private int radius = 10, diameter = radius * 2;
 
     public Node(int x, int y) {
+        neighbors = new ArrayList<Node>();
+        edges = new ArrayList<Edge>();
         xPos = x;
         yPos = y;
     }
@@ -52,11 +62,45 @@ public class Node {
         this.setY(y);
     }
 
+    public void addNeighbor(Node n) {
+        neighbors.add(n);
+    }
+
+    public void removeNeighbor(Node n) {
+        neighbors.remove(n);
+    }
+
+    public boolean hasNeighbor(Node n) {
+
+        for (Node node : neighbors) {
+            if (node == n) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ArrayList<Node> getNeighbors() {
+        return neighbors;
+    }
+
+    public void addEdge(Edge e) {
+        edges.add(e);
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillOval(xPos - radius, yPos - radius, diameter, diameter);
-        g.setColor(Color.DARK_GRAY);
+        g.setColor(Color.GRAY);
         g.drawOval(xPos - radius, yPos - radius, diameter, diameter);
     }
 
+    public String toString() {
+        return "Node";
+    }
 }
