@@ -26,8 +26,6 @@ public class GUndoManager {
                 graph.removeEdge(top.edge);
             }
             top = null;
-        } else {
-            System.out.println("Stack is empty");
         }
     }
 
