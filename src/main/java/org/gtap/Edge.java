@@ -11,7 +11,18 @@ public class Edge {
     double x1, x2, y1, y2;
 
     public Edge(Node n1, Node n2) {
+        Point startPoint = n1.getCenter();
+        Point endPoint = n1.getCenter();
+        x1 = startPoint.getX();
+        y1 = startPoint.getY();
+        x2 = endPoint.getX();
+        y2 = endPoint.getY();
 
+        node1 = n1;
+        node2 = n2;
+
+        node1.addEdge(this);
+        node2.addEdge(this);
     }
 
     public Edge(Node n1, int x, int y) {
