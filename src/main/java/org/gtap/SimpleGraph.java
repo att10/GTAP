@@ -70,7 +70,12 @@ public class SimpleGraph implements Graph {
         Node node2 = e.getNode2();
 
         node1.removeNeighbor(node2);
-        node2.removeNeighbor(node1);
+
+        // case when we are still drawing the edge
+        // node 2 not assigned yet
+        if (node2 != null) {
+            node2.removeNeighbor(node1);
+        }
 
         return edges.remove(e);
     }
