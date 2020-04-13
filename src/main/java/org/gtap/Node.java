@@ -95,7 +95,7 @@ public class Node {
 
     public void paint(Graphics2D g) {
         
-        g.setColor(Color.GRAY);
+        g.setColor(Color.WHITE);
         g.fillOval(xPos - radius, yPos - radius, diameter, diameter);
         g.setColor(Color.GRAY);
         g.drawOval(xPos - radius, yPos - radius, diameter, diameter);
