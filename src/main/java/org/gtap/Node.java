@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /*
  * Drawable Node Object.
@@ -16,7 +16,7 @@ public class Node {
     ArrayList<Edge> edges;
 
     private int xPos, yPos;
-    private int radius = 10, diameter = radius * 2;
+    private int radius = 15, diameter = radius * 2;
 
     public Node(int x, int y) {
         neighbors = new ArrayList<Node>();
@@ -93,8 +93,9 @@ public class Node {
         return edges;
     }
 
-    public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
+    public void paint(Graphics2D g) {
+        
+        g.setColor(Color.GRAY);
         g.fillOval(xPos - radius, yPos - radius, diameter, diameter);
         g.setColor(Color.GRAY);
         g.drawOval(xPos - radius, yPos - radius, diameter, diameter);

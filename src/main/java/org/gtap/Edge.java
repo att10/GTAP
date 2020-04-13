@@ -1,7 +1,6 @@
 package org.gtap;
 
 import java.awt.Point;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
@@ -73,10 +72,9 @@ public class Edge {
         y2 = y;
     }
 
-    public void paint(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
+    public void paint(Graphics2D g) {
         Line2D lin = new Line2D.Double(x1, y1, x2, y2);
-        g2.draw(lin);
+        g.draw(lin);
     }
 
     public String toString() {
