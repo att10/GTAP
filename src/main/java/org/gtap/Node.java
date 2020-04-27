@@ -15,15 +15,16 @@ public class Node {
     ArrayList<Node> neighbors; // list of adjacent nodes
     ArrayList<Edge> edges; // list of adjacent edges
 
-    private int xPos, yPos; // center of the node 
+    private int xPos, yPos; // center of the node
     private int radius = 15, diameter = radius * 2; // size
+    private String value = "";
 
     /**
      * Constructor.
-    * 
-    * @param x x position of the node.
-    * @param y y position of the node.
-    */
+     * 
+     * @param x x position of the node.
+     * @param y y position of the node.
+     */
     public Node(int x, int y) {
         neighbors = new ArrayList<Node>();
         edges = new ArrayList<Edge>();
@@ -32,75 +33,82 @@ public class Node {
     }
 
     /**
-    * Set the x position of the node. 
-    *
-    * @param x new x position
-    */
+     * Set the x position of the node.
+     *
+     * @param x new x position
+     */
     public void setX(int x) {
         xPos = x;
     }
 
     /**
-    * Set the y position of the node. 
-    *
-    * @param y: new y position.
-    */
+     * Set the y position of the node.
+     *
+     * @param y: new y position.
+     */
     public void setY(int y) {
         yPos = y;
     }
 
     /**
-    * Get the x position of the node. 
-    *
-    * @return x position of node.
-    */
+     * Get the x position of the node.
+     *
+     * @return x position of node.
+     */
     public int getX() {
         return xPos;
     }
 
     /**
-    * Get the y position of the node. 
-    *
-    * @return y position of node.
-    */
+     * Get the y position of the node.
+     *
+     * @return y position of node.
+     */
     public int getY() {
         return yPos;
     }
 
     /**
-    * Get the position at the center of the node. 
-    *
-    * @return position at the center of the node.
-    */
+     * Get the position at the center of the node.
+     *
+     * @return position at the center of the node.
+     */
     public Point getCenter() {
         return new Point(xPos, yPos);
     }
 
     /**
-    * Get the width of the node. 
-    *
-    * @return width of the node.
-    */
+     * Get the width of the node.
+     *
+     * @return width of the node.
+     */
     public int getWidth() {
         return diameter;
     }
 
     /**
-    * Get the height of the node. 
-    *
-    * @return height of the node.
-    */
+     * Get the height of the node.
+     *
+     * @return height of the node.
+     */
     public int getHeight() {
         return diameter;
     }
 
     /**
-    * Check whether the node contains the point (x, y).
-    * 
-    * @param x the x value of the point we are checking.
-    * @param y the y value of the point we are checking.
-    * @return true if (x, y) is contained in the node.
-    */
+     * Get the value/label of the node.
+     */
+    public void setValue(String s) {
+        value = s;
+    }
+
+    /**
+     * Check whether the node contains the point (x, y).
+     * 
+     * @param x the x value of the point we are checking.
+     * @param y the y value of the point we are checking.
+     * @return true if (x, y) is contained in the node.
+     */
     public boolean contains(int x, int y) {
         return new Ellipse2D.Double(xPos - radius, yPos - radius, diameter, diameter).contains(new Point(x, y));
     }
@@ -142,11 +150,12 @@ public class Node {
     }
 
     public void paint(Graphics2D g) {
-        
+
         g.setColor(Color.WHITE);
         g.fillOval(xPos - radius, yPos - radius, diameter, diameter);
         g.setColor(Color.GRAY);
         g.drawOval(xPos - radius, yPos - radius, diameter, diameter);
+        g.drawString(value, xPos, yPos);
     }
 
     public String toString() {
