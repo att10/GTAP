@@ -75,7 +75,6 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-
         for (Edge e : graph.getEdges()) {
             e.paint(g2);
         }
@@ -83,7 +82,6 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
             n.paint(g2);
         }
 
-        
     }
 
     @Override
@@ -127,6 +125,7 @@ public class GCanvas extends JPanel implements MouseListener, MouseMotionListene
                 undoManager.add(new GraphElement(null, currentEdge));
             }
 
+            currentEdge = null;
             repaint();
         }
     }
